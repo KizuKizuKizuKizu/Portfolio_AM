@@ -12,6 +12,19 @@ var revealObserver = new IntersectionObserver((entries) => {
 
 textBlocks.forEach((block) => revealObserver.observe(block));
 
+// Collapse the nav once the user scrolls down, expand it again at the very top
+var siteHeader = document.getElementById('site-header');
+
+if (siteHeader) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 0) {
+      siteHeader.classList.add('nav-collapsed');
+    } else {
+      siteHeader.classList.remove('nav-collapsed');
+    }
+  });
+}
+
 // Show a "back to top" button once the user has scrolled down a bit
 var backToTopButton = document.getElementById('back-to-top');
 
