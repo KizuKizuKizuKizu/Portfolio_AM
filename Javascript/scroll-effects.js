@@ -12,31 +12,35 @@ var revealObserver = new IntersectionObserver((entries) => {
 
 textBlocks.forEach((block) => revealObserver.observe(block));
 
-// Collapse the nav once the user scrolls down, expand it again at the very top
+// Hide the header (mobile only, see CSS) once the user scrolls down, show it
+// again at the very top, and toggle the back-to-top button — all batched into
+// a single rAF-throttled scroll handler to avoid jank.
 var siteHeader = document.getElementById('site-header');
+var backToTopButton = document.getElementById('back-to-top');
+var scrollTicking = false;
 
-if (siteHeader) {
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 0) {
-      siteHeader.classList.add('nav-collapsed');
-    } else {
-      siteHeader.classList.remove('nav-collapsed');
-    }
-  });
+function handleScroll() {
+  var y = window.scrollY;
+
+  if (siteHeader) {
+    siteHeader.classList.toggle('header-hidden', y > 0);
+  }
+
+  if (backToTopButton) {
+    backToTopButton.classList.toggle('visible', y > 400);
+  }
+
+  scrollTicking = false;
 }
 
-// Show a "back to top" button once the user has scrolled down a bit
-var backToTopButton = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  if (!scrollTicking) {
+    requestAnimationFrame(handleScroll);
+    scrollTicking = true;
+  }
+}, { passive: true });
 
 if (backToTopButton) {
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 400) {
-      backToTopButton.classList.add('visible');
-    } else {
-      backToTopButton.classList.remove('visible');
-    }
-  });
-
   backToTopButton.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

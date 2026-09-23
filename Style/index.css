@@ -27,6 +27,7 @@ body {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 20px;
+    padding: 14px 0;
     background-color: #111;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
@@ -50,17 +51,19 @@ body {
 }
 
 @media (max-width: 700px) {
-    #nav {
-        max-height: 300px;
-        opacity: 1;
-        overflow: hidden;
-        transition: max-height 0.3s ease, opacity 0.3s ease;
+    #site-header {
+        transition: transform 0.25s ease, opacity 0.25s ease;
+        will-change: transform;
     }
 
-    #site-header.nav-collapsed #nav {
-        max-height: 0;
+    #site-header.header-hidden {
+        transform: translateY(-100%);
         opacity: 0;
         pointer-events: none;
+    }
+
+    #lang-toggle {
+        margin-top: 6px;
     }
 }
 
